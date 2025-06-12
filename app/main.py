@@ -1,6 +1,6 @@
 from fastapi import FastAPI, HTTPException, Depends
-from .services.item_service import ItemService
-from .schemas import ItemBase, ItemResponse
+from app.services.item_service import ItemService
+from app.schemas import ItemBase, ItemResponse
 from typing import List
 
 app = FastAPI()

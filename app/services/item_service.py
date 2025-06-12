@@ -1,5 +1,5 @@
 from app.database import DatabaseManager
-from ..schemas import ItemBase, ItemResponse
+from app.schemas import ItemBase, ItemResponse
 from fastapi import HTTPException
 import mysql.connector
 

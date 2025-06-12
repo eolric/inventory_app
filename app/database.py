@@ -1,6 +1,6 @@
 import mysql.connector
 from mysql.connector import Error
-from config_manager import ConfigManager
+from app.config_manager import ConfigManager
 
 class DatabaseManager:
     def __init__(self):

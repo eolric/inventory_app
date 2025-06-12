@@ -2,7 +2,7 @@ from pydantic import BaseModel, Field, validator
 from typing import Optional
 
 class ItemBase(BaseModel):
-    codigo: str = Field(..., min_length=3, max_length=50, regex="^[a-zA-Z0-9-]+$")
+    codigo: str = Field(..., min_length=3, max_length=50, pattern="^[a-zA-Z0-9-]+$")
     nombre: str = Field(..., min_length=3, max_length=100)
     cantidad: float = Field(..., gt=0)
     precio_compra: float = Field(..., gt=0)
