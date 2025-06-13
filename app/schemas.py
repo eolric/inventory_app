@@ -19,3 +19,20 @@ class ItemResponse(ItemBase):
     id: int
     fecha_creacion: Optional[datetime]  # Cambiado a datetime
     fecha_actualizacion: Optional[datetime]  # Cambiado a datetime
+
+class ItemSearch(BaseModel):
+    search_term: str = Field(..., min_length=1, description="Término de búsqueda (código o nombre, parcial o completo)")
+
+class ItemUpdate(BaseModel):
+    codigo: Optional[str] = Field(None, min_length=3, max_length=50, pattern="^[a-zA-Z0-9-]+$")
+    nombre: Optional[str] = Field(None, min_length=3, max_length=100)
+    cantidad: Optional[float] = Field(None, gt=0)
+    precio_compra: Optional[float] = Field(None, gt=0)
+    precio_venta: Optional[float] = Field(None, gt=0)
+
+    @field_validator('precio_venta')
+    def precio_venta_mayor_que_compra(cls, v, values):
+        if v is not None and 'precio_compra' in values.data and values.data['precio_compra'] is not None:
+            if v <= values.data['precio_compra']:
+                raise ValueError("El precio de venta debe ser mayor al de compra")
+        return v
