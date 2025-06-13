@@ -1,0 +1,35 @@
+# Docker
+docker-compose.override.yml
+
+# Logs
+*.log
+logs/
+
+# IDE y editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# MySQL
+*.ibd
+*.frm
+*.myd
+*.myi
+*.trg
+
+# Testing
+.coverage
+htmlcov/
+.pytest_cache/
+
+# Archivos temporales
+*.tmp
+*~

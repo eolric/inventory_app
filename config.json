@@ -1,0 +1,23 @@
+{
+  "database": {
+    "host": "db",
+    "port": 3306,
+    "user": "inventario_user",
+    "password": "password_segura",
+    "database": "inventario_db"
+  },
+  "tables": {
+    "items": {
+      "columns": {
+        "id": {"type": "INT", "auto_increment": true, "primary_key": true},
+        "codigo": {"type": "VARCHAR(50)", "unique": true, "nullable": false},
+        "nombre": {"type": "VARCHAR(100)", "nullable": false},
+        "cantidad": {"type": "DECIMAL(10,2)", "nullable": false},
+        "precio_compra": {"type": "DECIMAL(10,2)", "nullable": false},
+        "precio_venta": {"type": "DECIMAL(10,2)", "nullable": false},
+        "fecha_creacion": {"type": "TIMESTAMP", "default": "CURRENT_TIMESTAMP"},
+        "fecha_actualizacion": {"type": "TIMESTAMP", "default": "CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"}
+      }
+    }
+  }
+}
