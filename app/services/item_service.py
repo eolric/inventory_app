@@ -95,7 +95,8 @@ class ItemService:
                        fecha_creacion, fecha_actualizacion
                 FROM items
             """)
-            return cursor.fetchall()
+            items = cursor.fetchall()
+            return items
         except mysql.connector.Error as e:
             raise HTTPException(status_code=500, detail=f"Error en la base de datos: {e}")
         finally:
