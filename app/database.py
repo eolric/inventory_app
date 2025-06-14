@@ -1,32 +1,39 @@
 import mysql.connector
 from mysql.connector import Error
 from app.config_manager import ConfigManager
+import time
 
 class DatabaseManager:
     def __init__(self):
         self.config = ConfigManager()
         self.connection = None
     
-    def connect(self):
-        try:
-            db_config = self.config.get_database_config()
-            self.connection = mysql.connector.connect(
-                host=db_config['host'],
-                port=db_config['port'],
-                user=db_config['user'],
-                password=db_config['password'],
-                database=db_config['database']
-            )
-            print("Conexión a MySQL exitosa")
-            return self.connection
-        except Error as e:
-            print(f"Error al conectar a MySQL: {e}")
-            return None
+    def connect(self, max_retries=5, delay=5):
+        for attempt in range(max_retries):
+            try:
+                db_config = self.config.get_database_config()
+                self.connection = mysql.connector.connect(
+                    host=db_config['host'],
+                    port=db_config['port'],
+                    user=db_config['user'],
+                    password=db_config['password'],
+                    database=db_config['database']
+                )
+                print("✅ Conexión a MySQL exitosa")
+                return self.connection
+            except Error as e:
+                print(f"⚠️ Intento {attempt + 1}/{max_retries}: Error al conectar a MySQL - {e}")
+                if attempt < max_retries - 1:
+                    time.sleep(delay)
+        return None
     
     def initialize_database(self):
         """Crea las tablas si no existen según la configuración"""
         try:
             cursor = self.connection.cursor()
+            
+            # Verificar si la base de datos existe, si no, crearla
+            cursor.execute(f"CREATE DATABASE IF NOT EXISTS {self.config.get_database_config()['database']}")
             
             for table_name, table_config in self.config.config['tables'].items():
                 columns = []
@@ -53,17 +60,18 @@ class DatabaseManager:
                 """
                 
                 cursor.execute(create_table_sql)
-                print(f"Tabla {table_name} verificada/creada")
+                print(f"✅ Tabla {table_name} verificada/creada")
             
             self.connection.commit()
             cursor.close()
             
         except Error as e:
-            print(f"Error al inicializar la base de datos: {e}")
+            print(f"❌ Error al inicializar la base de datos: {e}")
             if self.connection:
                 self.connection.rollback()
+            raise
     
     def close(self):
         if self.connection and self.connection.is_connected():
             self.connection.close()
-            print("Conexión a MySQL cerrada")
+            print("🔌 Conexión a MySQL cerrada")

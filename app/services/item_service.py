@@ -27,6 +27,26 @@ class ItemService:
             cursor.close()
             connection.close()
 
+    async def get_item(self, item_id: int) -> ItemResponse:
+        connection = self.db.connect()
+        cursor = connection.cursor(dictionary=True)
+        try:
+            cursor.execute("""
+                SELECT id, codigo, nombre, cantidad, precio_compra, precio_venta,
+                    fecha_creacion, fecha_actualizacion
+                FROM items
+                WHERE id = %s
+            """, (item_id,))
+            item = cursor.fetchone()
+            if not item:
+                raise HTTPException(status_code=404, detail="Item no encontrado")
+            return item
+        except mysql.connector.Error as e:
+            raise HTTPException(status_code=500, detail=f"Error en la base de datos: {e}")
+        finally:
+            cursor.close()
+            connection.close()
+
     async def search_items(self, search_term: str) -> list[ItemResponse]:
         connection = self.db.connect()
         cursor = connection.cursor(dictionary=True)
