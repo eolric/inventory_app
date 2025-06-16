@@ -2,9 +2,11 @@ fastapi[standard]
 uvicorn
 mysql-connector-python
 python-dotenv
+starlette
 python-multipart
 Jinja2
 python-jose
 passlib
 sqlalchemy
 pydantic
+itsdangerous

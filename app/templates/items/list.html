@@ -30,7 +30,7 @@
             <td>${{ item.precio_venta }}</td>
             <td>
                 <a href="/items/edit/{{ item.id }}" class="btn btn-sm btn-warning">Editar</a>
-                <form action="/api/items/{{ item.id }}" method="POST" class="d-inline">
+                <form action="/api/items/{{ item.id }}" method="POST" class="d-inline" onsubmit="return confirmDelete()">
                     <input type="hidden" name="_method" value="DELETE">
                     <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
                 </form>

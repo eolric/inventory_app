@@ -7,3 +7,40 @@ body {
     white-space: nowrap;
     width: 1%;
 }
+
+/* Estilos para mensajes flash */
+.alert {
+    margin-bottom: 1rem;
+}
+
+.alert-success {
+    background-color: #d1e7dd;
+    color: #0f5132;
+    border-color: #badbcc;
+}
+
+.alert-danger {
+    background-color: #f8d7da;
+    color: #842029;
+    border-color: #f5c2c7;
+}
+
+.alert-info {
+    background-color: #cfe2ff;
+    color: #084298;
+    border-color: #b6d4fe;
+}
+
+.is-invalid {
+    border-color: #dc3545 !important;
+}
+
+/* Mejoras para formularios */
+.invalid-feedback {
+    display: none;
+    color: #dc3545;
+}
+
+.is-invalid ~ .invalid-feedback {
+    display: block;
+}
