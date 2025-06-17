@@ -44,3 +44,44 @@ body {
 .is-invalid ~ .invalid-feedback {
     display: block;
 }
+
+/* app/static/css/styles.css (adiciones) */
+/* Mejoras para tablas */
+.table-responsive {
+    overflow-x: auto;
+}
+
+/* Cards consistentes */
+.card {
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    margin-bottom: 1.5rem;
+}
+
+.card-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+}
+
+/* Mejoras para formularios */
+.form-control:focus {
+    border-color: #86b7fe;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+/* Transiciones suaves */
+.btn, .form-control, .alert {
+    transition: all 0.2s ease-in-out;
+}
+
+/* Responsividad mejorada */
+@media (max-width: 768px) {
+    .table-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .table-actions .btn {
+        width: 100%;
+    }
+}

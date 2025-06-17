@@ -17,11 +17,8 @@ class ItemBase(BaseModel):
 
 class ItemResponse(ItemBase):
     id: int
-    fecha_creacion: Optional[datetime]  # Cambiado a datetime
-    fecha_actualizacion: Optional[datetime]  # Cambiado a datetime
-
-class ItemSearch(BaseModel):
-    search_term: str = Field(..., min_length=1, description="Término de búsqueda (código o nombre, parcial o completo)")
+    fecha_creacion: Optional[datetime]
+    fecha_actualizacion: Optional[datetime]
 
 class ItemUpdate(BaseModel):
     codigo: Optional[str] = Field(None, min_length=3, max_length=50, pattern="^[a-zA-Z0-9-]+$")

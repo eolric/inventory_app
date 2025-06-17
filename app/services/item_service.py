@@ -57,4 +57,30 @@ class ItemService:
             (Item.nombre.ilike(f"%{search_term}%"))
         ).order_by(Item.nombre).all()
     
-    # Resto de métodos implementados de manera similar...
+    @handle_db_errors
+    async def update_item(self, item_id: int, item_update: ItemUpdate) -> ItemResponse:
+        db_item = await self.get_item(item_id)
+        
+        update_data = item_update.model_dump(exclude_unset=True)
+        for key, value in update_data.items():
+            setattr(db_item, key, value)
+        
+        if db_item.precio_venta <= db_item.precio_compra:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="El precio de venta debe ser mayor al de compra"
+            )
+        
+        self.db.commit()
+        self.db.refresh(db_item)
+        return db_item
+    
+    @handle_db_errors
+    async def delete_item(self, item_id: int) -> None:
+        db_item = await self.get_item(item_id)
+        self.db.delete(db_item)
+        self.db.commit()
+    
+    @handle_db_errors
+    async def get_all_items(self, skip: int = 0, limit: int = 100) -> List[ItemResponse]:
+        return self.db.query(Item).offset(skip).limit(limit).all()
