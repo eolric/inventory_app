@@ -6,6 +6,11 @@ from fastapi.templating import Jinja2Templates
 from starlette.middleware.sessions import SessionMiddleware
 import secrets
 from pathlib import Path
+import time
+import json
+from sqlalchemy.exc import OperationalError
+
+# Importaciones de tu estructura de carpetas
 from app.core.database import engine, Base, get_db
 from app.api.v1.routers.items import router as items_router
 from app.services.item_service import ItemService
@@ -30,11 +35,35 @@ BASE_DIR = Path(__file__).resolve().parent
 app.mount("/static", StaticFiles(directory=BASE_DIR / "static"), name="static")
 templates = Jinja2Templates(directory=BASE_DIR / "templates")
 
+def wait_for_db():
+    """Espera a que la base de datos esté disponible"""
+    max_attempts = 10
+    attempt = 0
+    
+    while attempt < max_attempts:
+        try:
+            # Intenta establecer una conexión
+            with engine.connect() as conn:
+                print("✅ Conexión a la base de datos establecida con éxito!")
+                return True
+        except OperationalError as e:
+            attempt += 1
+            print(f"⏳ Intento {attempt}/{max_attempts} - La base de datos no está lista aún. Error: {e}")
+            time.sleep(5)
+    
+    raise Exception(f"❌ No se pudo conectar a la base de datos después de {max_attempts} intentos")
+
 # Inicialización de la base de datos
 @app.on_event("startup")
 async def startup_db():
     from app.models.item import Item  # noqa: F401
+    
+    print("🔃 Intentando conectar con la base de datos...")
+    wait_for_db()
+    
+    print("🔃 Creando tablas si no existen...")
     Base.metadata.create_all(bind=engine)
+    print("✅ Tablas creadas/verificadas correctamente!")
 
 # Incluir routers
 app.include_router(items_router, prefix="")

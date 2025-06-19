@@ -1,10 +1,11 @@
-{% if 'session' in request.scope and request.session.get('flash') %}
+{% if request.session.get('flash') %}
 <div class="container mt-3">
-    {% for category, message in request.session.pop('flash', {}).items() %}
-    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-        {{ message }}
+    <div class="alert alert-{{ request.session['flash']['type'] }} alert-dismissible fade show" role="alert">
+        {{ request.session['flash']['message'] }}
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
-    {% endfor %}
+    {{ request.session.pop('flash') }}
 </div>
 {% endif %}
+
+

@@ -20,7 +20,7 @@
             <td class="text-end">${{ "%.2f"|format(item.precio_venta) }}</td>
             <td class="text-center table-actions">
                 <a href="/items/edit/{{ item.id }}" class="btn btn-sm btn-warning me-1" 
-                   title="Editar" data-bs-toggle="tooltip">
+                title="Editar" data-bs-toggle="tooltip">
                     <i class="fas fa-edit"></i>
                 </a>
                 <form action="/api/items/{{ item.id }}" method="POST" class="d-inline">
