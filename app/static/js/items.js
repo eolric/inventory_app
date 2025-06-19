@@ -68,18 +68,46 @@ class ItemFormValidator {
     }
 
     validate(e) {
-        const invalidFields = this.form.querySelectorAll('.is-invalid');
-        const precioVenta = parseFloat(this.form.querySelector('#precio_venta').value) || 0;
-        const precioCompra = parseFloat(this.form.querySelector('#precio_compra').value) || 0;
-
-        if (invalidFields.length > 0 || precioVenta <= precioCompra) {
-            e.preventDefault();
-            if (precioVenta <= precioCompra) {
-                alert('El precio de venta debe ser mayor al precio de compra');
-                this.form.querySelector('#precio_venta').focus();
+        let isValid = true;
+        
+        // Validar campos requeridos
+        this.form.querySelectorAll('[required]').forEach(input => {
+            if (!input.value) {
+                input.classList.add('is-invalid');
+                isValid = false;
             }
+        });
+
+        // Validar precios
+        const precioCompra = parseFloat(this.form.querySelector('#precio_compra').value) || 0;
+        const precioVenta = parseFloat(this.form.querySelector('#precio_venta').value) || 0;
+        const precioVentaInput = this.form.querySelector('#precio_venta');
+        
+        if (precioVenta <= precioCompra) {
+            precioVentaInput.classList.add('is-invalid');
+            isValid = false;
+        }
+
+        if (!isValid) {
+            e.preventDefault();
+            // Mostrar mensaje de error más visible
+            const errorMessage = document.createElement('div');
+            errorMessage.className = 'alert alert-danger mt-3';
+            errorMessage.innerHTML = 'Por favor corrige los errores en el formulario';
+            
+            // Insertar después del formulario
+            this.form.parentNode.insertBefore(errorMessage, this.form.nextSibling);
+            
+            // Hacer scroll al primer error
+            const firstInvalid = this.form.querySelector('.is-invalid');
+            if (firstInvalid) {
+                firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                firstInvalid.focus();
+            }
+            
             return false;
         }
+        
         return true;
     }
 }

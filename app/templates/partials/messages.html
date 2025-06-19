@@ -1,11 +1,10 @@
 {% if request.session.get('flash') %}
 <div class="container mt-3">
-    <div class="alert alert-{{ request.session['flash']['type'] }} alert-dismissible fade show" role="alert">
-        {{ request.session['flash']['message'] }}
+    <div class="alert alert-{{ request.session.flash.type }} alert-dismissible fade show" role="alert">
+        {{ request.session.flash.message }}
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
-    {{ request.session.pop('flash') }}
+    {# Limpiamos el mensaje después de mostrarlo #}
+    {% set _ = request.session.pop('flash') %}
 </div>
 {% endif %}
-
-
